@@ -9,16 +9,18 @@ import {
 const MenuItem = (props) => {
   const [itemcount, setItemcount] = useState(0);
   const addItem = () => {
-    if (props.currentSale[props.item.name]) {
-      props.setCurrentSale({
-        ...props.currentSale,
-        [props.item.name]: props.currentSale[props.item.name] + itemcount,
-      });
-    } else {
-      props.setCurrentSale({
-        ...props.currentSale,
-        [props.item.name]: itemcount,
-      });
+    if (itemcount !== 0) {
+      if (props.currentSale[props.item.name]) {
+        props.setCurrentSale({
+          ...props.currentSale,
+          [props.item.name]: props.currentSale[props.item.name] + itemcount,
+        });
+      } else {
+        props.setCurrentSale({
+          ...props.currentSale,
+          [props.item.name]: itemcount,
+        });
+      }
     }
     setItemcount(0);
     console.log(props.currentSale);
@@ -44,12 +46,15 @@ const MenuItem = (props) => {
               icon={faMinusCircle}
               style={{ color: "#50df84", height: "50%" }}
               onClick={() => {
-                setItemcount(itemcount - 1);
+                if (itemcount > 0) {
+                  setItemcount(itemcount - 1);
+                }
               }}
             />
             <input
               className="w-[70%] text-center border-2 rounded-lg"
               type="number"
+              min="0"
               value={itemcount}
               onChange={(e) => {
                 setItemcount(Number(e.target.value));

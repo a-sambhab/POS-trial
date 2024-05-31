@@ -28,7 +28,7 @@ const Navbar = () => {
                 <FontAwesomeIcon icon={faBars} style={{ color: "#50DF84" }} />
                 Menu
               </div>
-            </NavLink>
+            </NavLink>  
             <NavLink
               // className="w-full h-[20%] flex justify-center items-center"
               className={({ isActive }) => {

@@ -138,7 +138,11 @@ const Landing = () => {
           </div>
         </div>
         <div className="h-full w-[22%] flex flex-col justify-center items-center">
-          <BillDetails/>
+          <BillDetails
+            items={allitems}
+            currentSale={currentSale}
+            setCurrentSale={setCurrentSale}
+          />
         </div>
       </div>
     </>
