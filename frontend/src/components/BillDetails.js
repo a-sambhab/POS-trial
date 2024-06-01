@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import AsyncSelect from "react-select/async";
 import Select from "react-select";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faIndianRupeeSign,
-  faMinusCircle,
   faMinusSquare,
-  faPlusCircle,
   faPlusSquare,
 } from "@fortawesome/free-solid-svg-icons";
 const BillDetails = (props) => {
@@ -17,7 +14,7 @@ const BillDetails = (props) => {
   const [subtotal, setSubtotal] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [extracharges, setExtracharges] = useState(0);
-  const [salestype, setSalestype] = useState("paid")
+  const [salestype, setSalestype] = useState("paid");
   const [grandtotal, setGrandtotal] = useState(subtotal);
   const getCustomers = async () => {
     const response = await axios.get("http://localhost:3001/getCustomers");
@@ -28,53 +25,75 @@ const BillDetails = (props) => {
     }
     setcustOptions(trial);
   };
-  const calculateSubtotal = () => {
-    var subt = 0;
-    Object.keys(props.currentSale).map((key) => {
-      subt =
-        subt +
-        props.items.find((i) => i.name === key).cost * props.currentSale[key];
-    });
-    setSubtotal(subt);
-    setGrandtotal(subt);
-    if (discount !== 0) {
-      setGrandtotal(subt - (subt * Number(discount)) / 100);
-    }
-    if (extracharges !== 0) {
-      setGrandtotal(subt + extracharges);
-    }
-  };
+
   const handleDiscount = (e) => {
     setDiscount(Number(e.target.value));
-    setGrandtotal(subtotal - (subtotal * Number(e.target.value)) / 100);
   };
   const handleExtraCharges = (e) => {
     setExtracharges(Number(e.target.value));
-    setGrandtotal(subtotal + Number(e.target.value));
   };
   const addSale = async () => {
-    const response = await axios({
-      method: "post",
-      url: "http://localhost:3001/addSales",
-      headers: {},
-      data: {
-        "content": props.currentSale,
-        "salestype": salestype,
-        "totalbill": Number(grandtotal),
-        "customerid": currcust.id,
-        "name": currcust.name,
-        "discount": discount===0?0:Number(discount),
-        "extracharges": extracharges===0?0:Number(extracharges)
-      },
-    });
-    console.log(response.data)
+    try {
+      if (Object.keys(props.currentSale).length === 0)
+        throw new Error("Sale not added");
+      if (salestype === "") throw new Error("Sale Type not set");
+      if (currcust.id === undefined) throw new Error("Customer not added");
+      const postData = {
+        content: props.currentSale,
+        salestype: salestype,
+        totalBill: Number(grandtotal),
+        customerid: currcust.id,
+        name: currcust.name,
+        discount: discount === 0 ? 0 : Number(discount),
+        extracharges: extracharges === 0 ? 0 : Number(extracharges),
+      };
+      console.log(postData);
+      const response = await axios({
+        method: "post",
+        url: "http://localhost:3001/addSales",
+        headers: {},
+        data: postData,
+      });
+      console.log(response.data);
+      if (response.status === 200) {
+        alert("Sale Added Successfully");
+        props.setCurrentSale({});
+        setSalestype("paid");
+        setCurrcust({});
+        setDiscount(0);
+        setSubtotal(0);
+        setExtracharges(0);
+        getCustomers();
+      }
+    } catch (error) {
+      alert(error);
+    }
   };
   useEffect(() => {
     getCustomers();
   }, []);
   useEffect(() => {
+    const calculateSubtotal = () => {
+      var subt = 0;
+      Object.keys(props.currentSale).map((key) => {
+        subt =
+          subt +
+          props.items.find((i) => i.name === key).cost * props.currentSale[key];
+        return subt;
+      });
+      setSubtotal(subt);
+    };
     calculateSubtotal();
-  }, [props.currentSale]);
+  }, [props.currentSale, props.items]);
+  useEffect(() => {
+    const calculateGrandTotal = () => {
+      var grandt = subtotal;
+      grandt = grandt - (grandt * discount) / 100;
+      grandt = grandt + extracharges;
+      setGrandtotal(grandt);
+    };
+    calculateGrandTotal();
+  }, [subtotal, discount, extracharges]);
 
   return (
     <>
@@ -188,17 +207,22 @@ const BillDetails = (props) => {
             <div className="w-full h-2/3 flex flex-row">
               <div className="h-full w-1/2 flex justify-center items-center">
                 Sales Type:
-                <select value={salestype} onChange={(e)=>{
-                  setSalestype(e.target.value);
-                }}>
+                <select
+                  value={salestype}
+                  onChange={(e) => {
+                    setSalestype(e.target.value);
+                  }}
+                >
                   <option value="credit">Credit</option>
                   <option value="paid">Paid</option>
                 </select>
               </div>
               <div className="h-full w-1/2 flex justify-center items-center">
                 <button
-                  className="w-full h-1/2 bg-[#50df84] rounded-lg"
-                  onClick={()=>{addSale()}}
+                  className="w-full h-1/2 bg-[#50df84] bg-opacity-70 text-white transition-all duration-200 ease-in-out hover:bg-opacity-100 hover:text-green-900 rounded-lg"
+                  onClick={() => {
+                    addSale();
+                  }}
                 >
                   Complete Sale
                 </button>

@@ -4,8 +4,30 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
   faBook,
-  faFileInvoice,
+  faCircleUser,
+  faPenToSquare,
+  faSquarePlus,
 } from "@fortawesome/free-solid-svg-icons";
+
+const Navbutton = (props) => {
+  return (
+    <>
+      <NavLink
+        className={({ isActive }) => {
+          return !isActive
+            ? "w-full h-[20%] flex justify-evenly items-center text-center p-[8%] text-lg hover:bg-gradient-to-r from-white via-green-200 to-green-400"
+            : "w-full h-[20%] flex justify-evenly items-center bg-gradient-to-r from-white via-green-200 to-green-400 text-center p-[8%] text-lg border-r-2 border-green-600";
+        }}
+        to={props.route}
+      >
+        <div className="w-full h-full flex justify-start items-center">
+          <FontAwesomeIcon icon={props.icon} style={{ color: "#50DF84", paddingRight: "15px" }} />
+          {props.name}
+        </div>
+      </NavLink>
+    </>
+  );
+};
 
 const Navbar = () => {
   return (
@@ -16,51 +38,11 @@ const Navbar = () => {
             <div>POS</div>
           </div>
           <div className="w-full h-[50%] flex flex-col items-start justify-evenly">
-            <NavLink
-              className={({ isActive }) => {
-                return !isActive
-                  ? "w-full h-[20%] flex justify-evenly items-center text-center p-[8%] text-lg hover:bg-gradient-to-r from-white via-green-200 to-green-400"
-                  : "w-full h-[20%] flex justify-evenly items-center bg-gradient-to-r from-white via-green-200 to-green-400 text-center p-[8%] text-lg border-r-2 border-green-600";
-              }}
-              to="/"
-            >
-              <div className="w-full h-full flex justify-evenly items-center">
-                <FontAwesomeIcon icon={faBars} style={{ color: "#50DF84" }} />
-                Menu
-              </div>
-            </NavLink>  
-            <NavLink
-              // className="w-full h-[20%] flex justify-center items-center"
-              className={({ isActive }) => {
-                return !isActive
-                  ? "w-full h-[20%] flex justify-center items-center text-center p-[8%] text-lg hover:bg-gradient-to-r from-white via-green-200 to-green-400"
-                  : "w-full h-[20%] flex justify-center items-center bg-gradient-to-r from-white via-green-200 to-green-400 text-center p-[8%] text-lg border-r-2 border-green-600";
-              }}
-              to="/history"
-            >
-              <div className="w-full h-full flex justify-evenly items-center">
-                {" "}
-                <FontAwesomeIcon icon={faBook} style={{ color: "#50DF84" }} />
-                History
-              </div>
-            </NavLink>
-            <NavLink
-              // className="w-full h-[20%] flex justify-center items-center"
-              className={({ isActive }) => {
-                return !isActive
-                  ? "w-full h-[20%] flex justify-center items-center text-center p-[8%] text-lg hover:bg-gradient-to-r from-white via-green-200 to-green-400"
-                  : "w-full h-[20%] flex justify-center items-center bg-gradient-to-r from-white via-green-200 to-green-400 text-center p-[8%] text-lg border-r-2 border-green-600";
-              }}
-              to="/bills"
-            >
-              <div className="w-full h-full flex justify-evenly items-center">
-                <FontAwesomeIcon
-                  icon={faFileInvoice}
-                  style={{ color: "#50DF84" }}
-                />
-                Bills
-              </div>
-            </NavLink>
+            <Navbutton name="Menu" route="/" icon={faBars} />
+            <Navbutton name="History" route="/history" icon={faBook} />
+            <Navbutton name="Add Item" route="/addItem" icon={faSquarePlus} />
+            <Navbutton name="Add Customer" route="/addCustomer" icon={faCircleUser} />
+            <Navbutton name="Update Customer" route="/updateCustomer" icon={faPenToSquare} />
           </div>
         </div>
       </div>
