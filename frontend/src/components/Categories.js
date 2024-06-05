@@ -18,9 +18,10 @@ const Categories = (props) => {
         >
           <FontAwesomeIcon
             icon={props.icon}
-            style={{ height: "65%", width: "20%", opacity: "0.4" }}
+            // style={{ height: "65%", width: "20%", opacity: "0.4" }}
+            class="h-[30%] xl:h-[65%] w-1/5 opacity-40"
           />
-          <div className="h-1/5 w-full text-center text-lg pb-1">
+          <div className="h-1/5 w-full text-center text-sm md:text-base xl:text-lg pb-1">
             {props.name}
           </div>
         </div>

@@ -29,16 +29,16 @@ const AddItem = () => {
   };
   return (
     <>
-      <div className="h-screen w-screen flex flex-row justify-evenly items-center">
+      <div className="h-screen w-screen flex flex-col xl:flex-row justify-evenly items-center">
         <Navbar />
         <div className="h-full w-[85%] bg-black bg-opacity-[0.01] flex flex-col items-center justify-evenly">
           <div className="h-[10%] w-full text-left text-3xl italic pl-[2%] pt-[1.5%]">
             Add Item
           </div>
           <div className="h-[87%] w-[98%] border-2 rounded-lg bg-white flex justify-center items-center">
-            <div className="h-1/2 w-1/4 bg-black bg-opacity-5 rounded-lg border-2 flex flex-col justify-evenly items-center">
+            <div className="h-[75%] xl:h-1/2 w-1/2 xl:w-1/4 bg-black bg-opacity-5 rounded-lg border-2 flex flex-col justify-evenly items-center">
               <div className="w-full h-1/4 flex flex-col items-center justify-center">
-                <label className="w-[90%] text-left text-md">Item Name: </label>
+                <label className="w-[90%] text-left text-2xl xl:text-md">Item Name: </label>
                 <input
                   value={itemnam}
                   onChange={(e) => {
@@ -48,7 +48,7 @@ const AddItem = () => {
                 />
               </div>
               <div className="w-full h-1/4 flex flex-col items-center justify-center">
-                <label className="w-[90%] text-left text-md">
+                <label className="w-[90%] text-left text-2xl xl:text-md">
                   Item Category:{" "}
                 </label>
                 <select
@@ -65,7 +65,7 @@ const AddItem = () => {
                 </select>
               </div>
               <div className="w-full h-1/4 flex flex-col items-center justify-center">
-                <label className="w-[90%] text-left text-md">Cost: </label>
+                <label className="w-[90%] text-left text-2xl xl:text-md">Cost: </label>
                 <input
                   value={cost}
                   onChange={(e) => {
@@ -76,7 +76,7 @@ const AddItem = () => {
               </div>
               <div className="w-full h-1/4 flex flex-col items-center justify-center">
                 <button
-                  className="w-1/2 h-1/2 rounded-lg border-2 text-white bg-opacity-70 transition-all duration-200 ease-in-out hover:bg-opacity-100 hover:text-green-900 bg-[#50df84]"
+                  className="w-1/2 h-1/2 text-xl xl:text-base rounded-lg border-2 text-white bg-opacity-70 transition-all duration-200 ease-in-out hover:bg-opacity-100 hover:text-green-900 bg-[#50df84]"
                   onClick={() => {
                     addItem();
                   }}

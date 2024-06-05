@@ -6,12 +6,14 @@ import {
   faIndianRupeeSign,
   faMinusSquare,
   faPlusSquare,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 const BillDetails = (props) => {
   const [Customers, setCustomers] = useState([]);
   const [custOptions, setcustOptions] = useState([]);
   const [currcust, setCurrcust] = useState({});
   const [subtotal, setSubtotal] = useState(0);
+  const [discountvalue, setDiscountvalue] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [extracharges, setExtracharges] = useState(0);
   const [salestype, setSalestype] = useState("paid");
@@ -88,6 +90,7 @@ const BillDetails = (props) => {
   useEffect(() => {
     const calculateGrandTotal = () => {
       var grandt = subtotal;
+      setDiscountvalue((grandt * discount) / 100);
       grandt = grandt - (grandt * discount) / 100;
       grandt = grandt + extracharges;
       setGrandtotal(grandt);
@@ -98,10 +101,10 @@ const BillDetails = (props) => {
   return (
     <>
       <div className="h-[99%] w-full border-l-2 border-black border-opacity-15 flex flex-col justify-center items-center">
-        <div className="w-full h-[10%] text-3xl italic text-center flex justify-center items-center">
+        <div className="w-[15%] h-[10%] text-3xl italic text-center flex justify-center items-center">
           <div>Bill Details</div>
         </div>
-        <div className="w-full h-[12%] flex flex-col items-center justify-evenly">
+        <div className="w-[12%] xl:w-full h-full xl:h-[12%] flex flex-row xl:flex-col items-center justify-evenly">
           <label className="w-[95%] text-left text-lg">Customer Name</label>
           <Select
             options={custOptions}
@@ -131,17 +134,20 @@ const BillDetails = (props) => {
                 <>
                   <div className="w-[95%] h-[20%] border-b-2">
                     <div className="w-full h-1/2 flex justify-evenly items-center">
-                      <div className="text-lg">{itemkey}</div>
-                      <div className="text-g opacity-50">
-                        price:{" "}
+                      <div className="text-lg md:text-base sm:text-sm text-wrap">{itemkey}</div>
+                      <div className="text-lg md:text-base sm:text-sm text-wrap opacity-50">
+                        Price:{" "}
                         {props.items.find((i) => i.name === itemkey).cost}
+                      </div>
+                      <div className="text-lg md:text-base sm:text-sm text-wrap opacity-50">
+                        Quantity: {props.currentSale[itemkey]}
                       </div>
                     </div>
                     <div className="w-full h-1/2 flex justify-evenly items-center opacity-80">
-                      Quantity: {props.currentSale[itemkey]}
                       <FontAwesomeIcon
                         icon={faMinusSquare}
-                        style={{ color: "#50df84", height: "60%" }}
+                        style={{ color: "#50df84", height: "80%" }}
+                        // className="md:h-[20%] [#50df84] h-4/5"
                         onClick={() => {
                           if (props.currentSale[itemkey] === 1) {
                             let copy = { ...props.currentSale };
@@ -159,11 +165,22 @@ const BillDetails = (props) => {
                       />
                       <FontAwesomeIcon
                         icon={faPlusSquare}
-                        style={{ color: "#50df84", height: "60%" }}
+                        style={{ color: "#50df84", height: "80%" }}
                         onClick={() => {
                           props.setCurrentSale({
                             ...props.currentSale,
                             [itemkey]: props.currentSale[itemkey] + 1,
+                          });
+                        }}
+                      />
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        style={{ color: "#50df84", height: "80%" }}
+                        onClick={() => {
+                          let copy = { ...props.currentSale };
+                          delete copy[itemkey];
+                          props.setCurrentSale({
+                            ...copy,
                           });
                         }}
                       />
@@ -173,12 +190,14 @@ const BillDetails = (props) => {
               );
             })}
           </div>
-          <div className="w-full h-[20%] border-2 flex flex-col items-center justify-evenly">
-            <div className="w-full h-1/3">Subtotal: {subtotal}</div>
-            <div className="w-full h-1/3">
+          <div className="w-full h-[20%] border-2 flex flex-col items-center justify-evenly sm:text-xs md:text-sm lg:text-base text-wrap">
+            <div className="w-full h-1/3 flex flex-row justify-evenly items-center">
+              Subtotal: {subtotal}
+            </div>
+            <div className="w-full h-1/3 flex flex-row justify-evenly items-center">
               Discount:
               <input
-                className="border-2 rounded-lg w-[70%] ml-2 text-center"
+                className="border-2 rounded-lg w-[20%] ml-2 text-center"
                 placeholder="Enter Discount in Percentage"
                 type="number"
                 value={discount}
@@ -187,8 +206,9 @@ const BillDetails = (props) => {
                   handleDiscount(e);
                 }}
               />{" "}
+              Discount value: {discountvalue}
             </div>
-            <div className="w-full h-1/3">
+            <div className="w-full h-1/3 flex flex-row justify-evenly items-center">
               Extra Charges:
               <input
                 type="number"
@@ -202,8 +222,8 @@ const BillDetails = (props) => {
               />
             </div>
           </div>
-          <div className="w-full h-[20%] border-2">
-            <div className="w-full h-1/3">Grand Total: {grandtotal}</div>
+          <div className="w-full h-[20%] border-2  sm:text-xs md:text-sm lg:text-base text-wrap">
+            <div className="w-full h-1/3 m-auto">Grand Total: {grandtotal}</div>
             <div className="w-full h-2/3 flex flex-row">
               <div className="h-full w-1/2 flex justify-center items-center">
                 Sales Type:
