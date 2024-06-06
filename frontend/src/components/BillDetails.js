@@ -100,15 +100,15 @@ const BillDetails = (props) => {
 
   return (
     <>
-      <div className="h-[99%] w-full border-l-2 border-black border-opacity-15 flex flex-col justify-center items-center">
-        <div className="w-[15%] h-[10%] text-3xl italic text-center flex justify-center items-center">
+      <div className="h-[120%] w-full border-l-2 border-black border-opacity-15 flex xl:flex-col justify-center items-center">
+        <div className="xl:w-[99%] xl:h-[10%] text-3xl italic text-center flex justify-start items-center">
           <div>Bill Details</div>
         </div>
-        <div className="w-[12%] xl:w-full h-full xl:h-[12%] flex flex-row xl:flex-col items-center justify-evenly">
-          <label className="w-[95%] text-left text-lg">Customer Name</label>
+        <div className="w-[20%] xl:w-full h-1/2 xl:h-[12%] flex flex-row xl:flex-col items-center justify-evenly">
+          <label className="w-[50%] xl:w-[95%] text-left text-lg">Customer Name</label>
           <Select
             options={custOptions}
-            className="w-[95%] bg-black bg-opacity-5"
+            className="w-[50%] xl:w-[95%] bg-black bg-opacity-5"
             value={currcust.label}
             onChange={(selectedOption) => {
               setCurrcust(
@@ -118,7 +118,7 @@ const BillDetails = (props) => {
             }}
           />
         </div>
-        <div className="w-[95%] h-[5%] border-b-2 flex flex-row items-center justify-evenly">
+        <div className="w-[20%] xl:w-[95%] h-[50%] xl:h-[5%] border-r-2 xl:border-b-2 flex flex-row items-center justify-evenly">
           <div className="w-[70%] h-full flex justify-center items-center ">
             Balance:{" "}
           </div>
@@ -127,13 +127,13 @@ const BillDetails = (props) => {
             {currcust.balance}
           </div>
         </div>
-        <div className="w-full h-[73%]">
-          <div className="w-full h-[60%] flex flex-col items-center justify-start overflow-auto">
+        <div className=" w-[50%] xl:w-full h-full xl:h-[73%]">
+          <div className="w-full h-[20%] xl:h-[60%] flex flex-col items-center justify-start overflow-auto">
             {Object.keys(props.currentSale).map((itemkey) => {
               return (
                 <>
-                  <div className="w-[95%] h-[20%] border-b-2">
-                    <div className="w-full h-1/2 flex justify-evenly items-center">
+                  <div className="w-[95%] h-[90%] xl:h-[20%] border-b-2">
+                    <div className="w-full h-1/3 flex justify-evenly items-center">
                       <div className="text-lg md:text-base sm:text-sm text-wrap">{itemkey}</div>
                       <div className="text-lg md:text-base sm:text-sm text-wrap opacity-50">
                         Price:{" "}
@@ -143,10 +143,10 @@ const BillDetails = (props) => {
                         Quantity: {props.currentSale[itemkey]}
                       </div>
                     </div>
-                    <div className="w-full h-1/2 flex justify-evenly items-center opacity-80">
+                    <div className="w-full h-2/3 flex justify-evenly items-center opacity-80">
                       <FontAwesomeIcon
                         icon={faMinusSquare}
-                        style={{ color: "#50df84", height: "80%" }}
+                        style={{ color: "#50df84", height: "100%" }}
                         // className="md:h-[20%] [#50df84] h-4/5"
                         onClick={() => {
                           if (props.currentSale[itemkey] === 1) {
@@ -165,7 +165,7 @@ const BillDetails = (props) => {
                       />
                       <FontAwesomeIcon
                         icon={faPlusSquare}
-                        style={{ color: "#50df84", height: "80%" }}
+                        style={{ color: "#50df84", height: "100%" }}
                         onClick={() => {
                           props.setCurrentSale({
                             ...props.currentSale,
@@ -175,7 +175,7 @@ const BillDetails = (props) => {
                       />
                       <FontAwesomeIcon
                         icon={faTrash}
-                        style={{ color: "#50df84", height: "80%" }}
+                        style={{ color: "#50df84", height: "100%" }}
                         onClick={() => {
                           let copy = { ...props.currentSale };
                           delete copy[itemkey];
@@ -190,7 +190,7 @@ const BillDetails = (props) => {
               );
             })}
           </div>
-          <div className="w-full h-[20%] border-2 flex flex-col items-center justify-evenly sm:text-xs md:text-sm lg:text-base text-wrap">
+          <div className="w-full h-[40%] xl:h-[20%] border-2 flex flex-col items-center justify-evenly sm:text-xs md:text-sm lg:text-base text-wrap">
             <div className="w-full h-1/3 flex flex-row justify-evenly items-center">
               Subtotal: {subtotal}
             </div>
@@ -222,7 +222,7 @@ const BillDetails = (props) => {
               />
             </div>
           </div>
-          <div className="w-full h-[20%] border-2  sm:text-xs md:text-sm lg:text-base text-wrap">
+          <div className="w-full h-[40%] xl:h-[20%] border-2  sm:text-xs md:text-sm lg:text-base text-wrap">
             <div className="w-full h-1/3 m-auto">Grand Total: {grandtotal}</div>
             <div className="w-full h-2/3 flex flex-row">
               <div className="h-full w-1/2 flex justify-center items-center">
