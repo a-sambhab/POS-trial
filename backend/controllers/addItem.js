@@ -5,6 +5,8 @@ const addItem = async (req, res) => {
     name: req.body.name,
     cost: req.body.cost,
     group: req.body.group,
+    cgst: req.body.cgst,
+    sgst: req.body.sgst,
   });
   const newitem = await item.save();
   const allitems = await menuItem.find({});

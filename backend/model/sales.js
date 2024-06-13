@@ -15,7 +15,7 @@ const Sales = new mongoose.Schema({
         required: true,
     },
     content: {
-        type: Map,
+        type: Array,
         required: true,
     },
     discount: {

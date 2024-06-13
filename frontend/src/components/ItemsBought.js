@@ -1,30 +1,32 @@
-import React, { useState } from "react";
+import React from "react";
 
 const ItemsBought = (props) => {
-  const [isvisible, setIsvisible] = useState(false);
-  const handleMouse = (value) => {
-    setIsvisible(value);
-  };
-  console.log(props.items);
   return (
     <>
-      <div className="w-[95%] h-[95%]" onMouseEnter={()=>{handleMouse(true)}} onMouseLeave={()=>{handleMouse(false)}}>
-        {!isvisible ? (
-          <>
-            <div className=" h-full w-full flex justify-center items-center text-blue-700 underline">Sales Content</div>
-          </>
-        ) : (
-          <ul className="h-full w-full flex flex-col items-center justify-center overflow-auto">
-          {Object.keys(props.items).map(i=>{
-            return(
-                <>
-                    <li className="truncate">{i}: {props.items[i]}</li>
-                </>
-            )
-          })}
-          </ul>
-        )}
-      </div>
+      {!props.isvisible ? (
+        <></>
+      ) : (
+        <>
+          <div className="w-screen h-screen bg-white bg-opacity-40 fixed top-0 left-0 flex justify-center items-center">
+            <div className="w-1/2 h-1/2 bg-white border-2 rounded-xl flex flex-col items-center justify-evenly">
+              <ul className="h-[85%] w-full flex flex-col items-center justify-center overflow-auto">
+                {Object.keys(props.items).map((i) => {
+                  return (
+                    <>
+                      <li className="truncate">
+                        {i}: {props.items[i]}
+                      </li>
+                    </>
+                  );
+                })}
+              </ul>
+              <div className="h-[10%] w-full flex justify-center items-center">
+                <button onClick={()=>{props.setIsvisible(false)}} className="w-[60%] h-[95%] bg-[#50df84] bg-opacity-70 text-white transition-all duration-200 ease-in-out hover:bg-opacity-100 hover:text-green-900 rounded-lg">Close</button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

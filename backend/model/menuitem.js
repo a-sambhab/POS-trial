@@ -12,6 +12,14 @@ const menuItem = new mongoose.Schema({
     group: {
         type: String,
         required: true,
+    },
+    cgst: {
+        type: Number, 
+        required: true,
+    },
+    sgst: {
+        type: Number, 
+        required: true,
     }
 });
 
