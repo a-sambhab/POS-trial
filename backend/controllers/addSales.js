@@ -9,6 +9,9 @@ const addSales = async (req, res) => {
     salestype: req.body.salestype,
     totalBill: req.body.totalBill,
   });
+  if(req.body.salestype === "paid"){
+    newsale.paymenttype = req.body.paymenttype;
+  }
   if (req.body.extracharges !== undefined) {
     newsale.extracharges = req.body.extracharges;
   }

@@ -16,7 +16,7 @@ const Navbutton = (props) => {
         className={({ isActive }) => {
           return !isActive
             ? "w-[10%] sm:w-[18%] xl:w-full h-full xl:h-[20%] flex justify-evenly items-center text-center xl:p-[8%] text-lg hover:bg-gradient-to-r from-white via-green-200 to-green-400"
-            : "w-[10%] sm:w-[18%] xl:w-full h-full xl:h-[20%] flex justify-evenly items-center bg-gradient-to-r from-white via-green-200 to-green-400 text-center xl:p-[8%] text-lg border-r-2 border-green-600";
+            : "w-[10%] sm:w-[18%] xl:w-full h-full xl:h-[20%] flex justify-evenly items-center bg-gradient-to-r from-white via-green-200 to-green-400 text-center xl:p-[8%] text-lg border-r-2 border-green-600"
         }}
         to={props.route}
       >

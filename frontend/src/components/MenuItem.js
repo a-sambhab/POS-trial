@@ -4,16 +4,20 @@ import { faIndianRupeeSign } from "@fortawesome/free-solid-svg-icons";
 
 const MenuItem = (props) => {
   const addItem = () => {
-    if (props.currentSale[props.item.name]) {
-      props.setCurrentSale({
-        ...props.currentSale,
-        [props.item.name]: props.currentSale[props.item.name] + 1,
-      });
+    if (props.currentSale.find(item=> item.name===props.item.name)) {
+      props.setCurrentSale(props.currentSale.map(sale => 
+        sale.name === props.item.name ? {...sale, quantity: sale.quantity+1, cgstAmount: sale.cgstAmount+sale.cost*sale.cgst/100, sgstAmount: sale.sgstAmount+sale.cost*sale.sgst/100} : sale
+      ))
     } else {
-      props.setCurrentSale({
+      props.setCurrentSale([
         ...props.currentSale,
-        [props.item.name]: 1,
-      });
+        {
+          ...props.item,
+          quantity: 1,
+          cgstAmount: props.item.cost*props.item.cgst/100,
+          sgstAmount: props.item.cost*props.item.sgst/100,
+        }
+      ]);
     }
 
     console.log(props.currentSale);

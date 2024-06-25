@@ -60,7 +60,7 @@ const AddItem = () => {
                 <input
                   value={category}
                   onChange={(e) => {
-                    category  (e.target.value);
+                    setCategory(e.target.value);
                   }}
                   className="w-[90%] bg-white border-2 rounded-lg"
                 />
@@ -71,6 +71,8 @@ const AddItem = () => {
                 </label>
                 <input
                   value={cost}
+                  type="number"
+                  min="0"
                   onChange={(e) => {
                     setCost(Number(e.target.value));
                   }}
@@ -83,6 +85,8 @@ const AddItem = () => {
                 </label>
                 <input
                   value={cgst}
+                  type="number"
+                  min="0"
                   onChange={(e) => {
                     setCgst(Number(e.target.value));
                   }}
@@ -95,6 +99,8 @@ const AddItem = () => {
                 </label>
                 <input
                   value={sgst}
+                  type="number"
+                  min="0"
                   onChange={(e) => {
                     setSgst(Number(e.target.value));
                   }}

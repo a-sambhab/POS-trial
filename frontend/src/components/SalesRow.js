@@ -18,6 +18,9 @@ const SalesRow = (props) => {
         <div className="w-[12.5%] h-[90%] border-l-2 text-wrap flex justify-center items-center truncate">
           {props.data.salestype}
         </div>
+        <div className="w-[12.5%] h-[90%] border-l-2 text-wrap flex justify-center items-center truncate">
+          {props.data.paymenttype}
+        </div>
         <div className="w-[12.5%] h-[90%] border-l-2 text-wrap flex justify-center items-center">
           <div
             className=" h-full w-full flex justify-center items-center text-blue-700 underline cursor-pointer"

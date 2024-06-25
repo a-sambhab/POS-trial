@@ -27,7 +27,10 @@ const History = () => {
               <div className="w-[12.5%] h-[98%] border-l-2 flex justify-center items-center truncate">Customer ID</div>
               <div className="w-[12.5%] h-[98%] border-l-2 flex justify-center items-center truncate">Date</div>
               <div className="w-[12.5%] h-[98%] border-l-2 flex justify-center items-center truncate">Sales Type</div>
+              <div className="w-[12.5%] h-[98%] border-l-2 flex justify-center items-center truncate">Payment Type</div>
               <div className="w-[12.5%] h-[98%] border-l-2 flex justify-center items-center truncate">Items Bought</div>
+              {/* <div className="w-[12.5%] h-[98%] border-l-2 flex justify-center items-center truncate">CGST</div> */}
+              {/* <div className="w-[12.5%] h-[98%] border-l-2 flex justify-center items-center truncate">SGST</div> */}
               <div className="w-[12.5%] h-[98%] border-l-2 flex justify-center items-center truncate">Discount</div>
               <div className="w-[12.5%] h-[98%] border-l-2 flex justify-center items-center truncate">Extra Charges</div>
               <div className="w-[12.5%] h-[98%] border-l-2 flex justify-center items-center truncate">Total Bill</div>

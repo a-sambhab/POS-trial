@@ -21,7 +21,7 @@ const Landing = () => {
   const [itemcount, setItemcount] = useState(30);
   const [allitems, setAllitems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
-  const [currentSale, setCurrentSale] = useState({});
+  const [currentSale, setCurrentSale] = useState([]);
   const getallitems = async () => {
     const response = await axios.get("http://localhost:3001/getItems");
     setAllitems(response.data.items);
@@ -51,7 +51,7 @@ const Landing = () => {
     <>
       <div className="h-screen w-screen flex flex-col xl:flex-row  justify-evenly items-center">
         <Navbar />
-        <div className="h-[63%] xl:h-full w-full xl:w-[63%]">
+        <div className="h-[63%] xl:h-full w-full xl:w-[58%]">
           <div className="h-[13%] w-full flex justify-center items-center">
             <div className="h-full w-[99%] border-b-2 border-black border-opacity-15 flex justify-center items-center">
               <div className="search h-1/2 w-[50%] bg-black bg-opacity-[0.01] flex justify-evenly items-center border-2 border-black border-opacity-5 rounded-lg">
@@ -137,7 +137,7 @@ const Landing = () => {
             </div>
           </div>
         </div>
-        <div className="h-[22%] xl:h-full w-full xl:w-[22%] flex flex-row xl:flex-col justify-center items-center">
+        <div className="h-[22%] xl:h-full w-full xl:w-[27%] flex flex-row xl:flex-col justify-center items-center">
           <BillDetails
             items={allitems}
             currentSale={currentSale}

@@ -17,6 +17,7 @@ const BillDetails = (props) => {
   const [discount, setDiscount] = useState(0);
   const [extracharges, setExtracharges] = useState(0);
   const [salestype, setSalestype] = useState("paid");
+  const [paymenttype, setPaymenttype] = useState("cash");
   const [grandtotal, setGrandtotal] = useState(subtotal);
   const getCustomers = async () => {
     const response = await axios.get("http://localhost:3001/getCustomers");
@@ -36,13 +37,13 @@ const BillDetails = (props) => {
   };
   const addSale = async () => {
     try {
-      if (Object.keys(props.currentSale).length === 0)
-        throw new Error("Sale not added");
+      if (props.currentSale.length === 0) throw new Error("Sale not added");
       if (salestype === "") throw new Error("Sale Type not set");
       if (currcust.id === undefined) throw new Error("Customer not added");
       const postData = {
         content: props.currentSale,
         salestype: salestype,
+        paymenttype: salestype !== "paid" ? "" : paymenttype,
         totalBill: Number(grandtotal),
         customerid: currcust.id,
         name: currcust.name,
@@ -59,11 +60,12 @@ const BillDetails = (props) => {
       console.log(response.data);
       if (response.status === 200) {
         alert("Sale Added Successfully");
-        props.setCurrentSale({});
+        props.setCurrentSale([]);
         setSalestype("paid");
         setCurrcust({});
         setDiscount(0);
         setSubtotal(0);
+        setPaymenttype("cash");
         setExtracharges(0);
         getCustomers();
       }
@@ -77,10 +79,8 @@ const BillDetails = (props) => {
   useEffect(() => {
     const calculateSubtotal = () => {
       var subt = 0;
-      Object.keys(props.currentSale).map((key) => {
-        subt =
-          subt +
-          props.items.find((i) => i.name === key).cost * props.currentSale[key];
+      props.currentSale.map((key) => {
+        subt = subt + key.cost * key.quantity + key.sgstAmount + key.cgstAmount;
         return subt;
       });
       setSubtotal(subt);
@@ -132,28 +132,37 @@ const BillDetails = (props) => {
         <div className=" w-[50%] xl:w-full h-full xl:h-[73%]">
           <div className="w-full h-[20%] xl:h-[60%] flex flex-col items-center justify-start overflow-auto">
             <div className="w-[95%] h-[90%] xl:h-[10%] border-b-2 flex justify-evenly items-center">
-              <div className="w-[25%] h-full text-center">Item</div>
-              <div className="w-[25%] h-full text-center">Rate</div>
-              <div className="w-[25%] h-full text-center">Quantity</div>
-              <div className="w-[25%] h-full text-center">Amount</div>
+              <div className="w-1/6 h-full text-center">Item</div>
+              <div className="w-1/6 h-full text-center">Rate</div>
+              <div className="w-1/6 h-full text-center">Quantity</div>
+              <div className="w-1/6 h-full text-center">CGST</div>
+              <div className="w-1/6 h-full text-center">SGST</div>
+              <div className="w-1/6 h-full text-center">Amount</div>
             </div>
-            {Object.keys(props.currentSale).map((itemkey) => {
+            {props.currentSale.map((sale) => {
               return (
                 <>
                   <div className="w-[95%] h-[90%] xl:h-[20%] border-b-2">
                     <div className="w-full h-1/3 flex justify-evenly items-center">
-                      <div className="w-[25%] text-center text-lg md:text-base sm:text-sm text-wrap">
-                        {itemkey}
+                      <div className="w-1/6 text-center text-lg md:text-base sm:text-sm text-wrap">
+                        {sale.name}
                       </div>
-                      <div className="w-[25%] text-center text-lg md:text-base sm:text-sm text-wrap opacity-50">
-                        {props.items.find((i) => i.name === itemkey).cost}
+                      <div className="w-1/6 text-center text-lg md:text-base sm:text-sm text-wrap opacity-50">
+                        {sale.cost}
                       </div>
-                      <div className="w-[25%] text-center text-lg md:text-base sm:text-sm text-wrap opacity-50">
-                        {props.currentSale[itemkey]}
+                      <div className="w-1/6 text-center text-lg md:text-base sm:text-sm text-wrap opacity-50">
+                        {sale.quantity}
                       </div>
-                      <div className="w-[25%] text-center text-lg md:text-base sm:text-sm text-wrap opacity-50">
-                        {props.currentSale[itemkey] *
-                          props.items.find((i) => i.name === itemkey).cost}
+                      <div className="w-1/6 text-center text-lg md:text-base sm:text-sm text-wrap opacity-50">
+                        {sale.cgstAmount}
+                      </div>
+                      <div className="w-1/6 text-center text-lg md:text-base sm:text-sm text-wrap opacity-50">
+                        {sale.sgstAmount}
+                      </div>
+                      <div className="w-1/6 text-center text-lg md:text-base sm:text-sm text-wrap opacity-50">
+                        {sale.quantity * sale.cost +
+                          sale.sgstAmount +
+                          sale.cgstAmount}
                       </div>
                     </div>
                     <div className="w-full h-2/3 flex justify-evenly items-center opacity-80">
@@ -162,17 +171,28 @@ const BillDetails = (props) => {
                         style={{ color: "#50df84", height: "60%" }}
                         // className="md:h-[20%] [#50df84] h-4/5"
                         onClick={() => {
-                          if (props.currentSale[itemkey] === 1) {
-                            let copy = { ...props.currentSale };
-                            delete copy[itemkey];
-                            props.setCurrentSale({
-                              ...copy,
-                            });
+                          if (sale.quantity === 1) {
+                            let copy = props.currentSale.filter(
+                              (item) => item.name !== sale.name
+                            );
+                            props.setCurrentSale([...copy]);
                           } else {
-                            props.setCurrentSale({
-                              ...props.currentSale,
-                              [itemkey]: props.currentSale[itemkey] - 1,
-                            });
+                            props.setCurrentSale(
+                              props.currentSale.map((item) =>
+                                item.name === sale.name
+                                  ? {
+                                      ...item,
+                                      quantity: item.quantity - 1,
+                                      cgstAmount:
+                                        item.cgstAmount -
+                                        (item.cost * item.cgst) / 100,
+                                      sgstAmount:
+                                        item.sgstAmount -
+                                        (item.cost * item.sgst) / 100,
+                                    }
+                                  : item
+                              )
+                            );
                           }
                         }}
                       />
@@ -180,22 +200,35 @@ const BillDetails = (props) => {
                         icon={faPlusSquare}
                         style={{ color: "#50df84", height: "60%" }}
                         onClick={() => {
-                          props.setCurrentSale({
-                            ...props.currentSale,
-                            [itemkey]: props.currentSale[itemkey] + 1,
-                          });
+                          props.setCurrentSale(
+                            props.currentSale.map((item) =>
+                              item.name === sale.name
+                                ? {
+                                    ...item,
+                                    quantity: item.quantity + 1,
+                                    cgstAmount:
+                                      item.cgstAmount +
+                                      (item.cost * item.cgst) / 100,
+                                    sgstAmount:
+                                      item.sgstAmount +
+                                      (item.cost * item.sgst) / 100,
+                                  }
+                                : item
+                            )
+                          );
                         }}
                       />
                       <FontAwesomeIcon
                         icon={faTrash}
                         style={{ color: "#50df84", height: "60%" }}
                         onClick={() => {
-                          if (window.confirm("Delete Item from Bill?")===true) {
-                            let copy = { ...props.currentSale };
-                            delete copy[itemkey];
-                            props.setCurrentSale({
-                              ...copy,
-                            });
+                          if (
+                            window.confirm("Delete Item from Bill?") === true
+                          ) {
+                            let copy = props.currentSale.filter(
+                              (item) => item.name !== sale.name
+                            );
+                            props.setCurrentSale([...copy]);
                           }
                         }}
                       />
@@ -243,17 +276,36 @@ const BillDetails = (props) => {
               Grand Total: <div>{grandtotal}</div>
             </div>
             <div className="w-full h-2/3 flex flex-row">
-              <div className="h-full w-1/2 flex justify-center items-center">
-                Sales Type:
-                <select
-                  value={salestype}
-                  onChange={(e) => {
-                    setSalestype(e.target.value);
-                  }}
-                >
-                  <option value="credit">Credit</option>
-                  <option value="paid">Paid</option>
-                </select>
+              <div className="w-1/2 h-full flex flex-col items-center justify-evenly">
+                <div className="h-1/2 w-full flex justify-center items-center">
+                  Sales Type:
+                  <select
+                    value={salestype}
+                    onChange={(e) => {
+                      setSalestype(e.target.value);
+                    }}
+                  >
+                    <option value="credit">Credit</option>
+                    <option value="paid">Paid</option>
+                  </select>
+                </div>
+                {salestype === "paid" ? (
+                  <div className="h-1/2 w-full flex justify-center items-center">
+                    Payment Type:
+                    <select
+                      value={paymenttype}
+                      onChange={(e) => {
+                        setPaymenttype(e.target.value);
+                      }}
+                    >
+                      <option value="cash">Cash</option>
+                      <option value="upi">UPI</option>
+                      <option value="card">Card</option>
+                    </select>
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
               <div className="h-full w-1/2 flex justify-center items-center">
                 <button
