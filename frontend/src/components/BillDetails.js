@@ -18,6 +18,8 @@ const BillDetails = (props) => {
   const [extracharges, setExtracharges] = useState(0);
   const [salestype, setSalestype] = useState("paid");
   const [paymenttype, setPaymenttype] = useState("cash");
+  const [totalCGST, setTotalCGST] = useState(0)
+  const [totalSGST, setTotalSGST] = useState(0)
   const [grandtotal, setGrandtotal] = useState(subtotal);
   const getCustomers = async () => {
     const response = await axios.get("http://localhost:3001/getCustomers");
@@ -79,11 +81,17 @@ const BillDetails = (props) => {
   useEffect(() => {
     const calculateSubtotal = () => {
       var subt = 0;
+      var cgsttotal = 0;
+      var sgsttotal = 0;
       props.currentSale.map((key) => {
         subt = subt + key.cost * key.quantity + key.sgstAmount + key.cgstAmount;
+        cgsttotal = key.cgstAmount + cgsttotal;
+        sgsttotal = key.sgstAmount + sgsttotal;
         return subt;
       });
       setSubtotal(subt);
+      setTotalCGST(cgsttotal);
+      setTotalSGST(sgsttotal);
     };
     calculateSubtotal();
   }, [props.currentSale, props.items]);
@@ -240,7 +248,9 @@ const BillDetails = (props) => {
           </div>
           <div className="w-full h-[40%] xl:h-[20%] border-2 flex flex-col items-center justify-evenly sm:text-xs md:text-sm lg:text-base text-wrap">
             <div className="w-[90%] h-1/3 flex flex-row justify-between items-center">
-              Subtotal: <div>{subtotal}</div>
+            <div className="w-[31%] truncate text-base">CGST: {totalCGST}</div>
+            <div className="w-[31%] truncate text-base">SGST: {totalSGST}</div>
+            <div className="w-[31%] truncate text-base">Subtotal: {subtotal}</div>
             </div>
             <div className="w-full h-1/3 flex flex-row justify-evenly items-center truncate">
               Discount:
